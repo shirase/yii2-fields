@@ -1,0 +1,29 @@
+{
+    "name": "shirase/yii2-fields",
+    "type": "yii2-extension",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/shirase/yii2-tree-behavior"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/shirase/yii2-sortable"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/shirase/yii2-returned"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "shirase/yii2-tree-behavior": "*",
+        "shirase/yii2-sortable": "*",
+        "shirase/yii2-returned": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "shirase\\modules\\fields\\": ""
+        }
+    }
+}
