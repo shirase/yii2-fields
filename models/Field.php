@@ -244,12 +244,12 @@ class Field extends \yii\db\ActiveRecord
     }
 
     /**
-     * Возвращает поля заполненных харектеристик сущностей, соответствующих критериям
+     * Возвращает id заполненных харектеристик сущностей, соответствующих критериям
      * @param $itemQuery Query
      * @param null $time
      * @return array|mixed|null
      */
-    public static function activeFields($itemQuery, $time = null)
+    public static function activeFieldsId($itemQuery, $time = null)
     {
         if ($itemQuery) {
             $itemQuery = clone($itemQuery);
