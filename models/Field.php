@@ -150,42 +150,6 @@ class Field extends \yii\db\ActiveRecord
     }
 
     /**
-     * Возвращает список значений полей сущности
-     * Справочники возвращаются в виде модели справочника, которые могут приводится к строке
-     * @param $item_id
-     * @param bool $activeOnly
-     * @param null $time
-     * @return array
-     */
-    public static function values($item_id, $activeOnly = false, $time = null)
-    {
-        $values = [];
-
-        $query = self::find()->groupBy('type')->select('type');
-        if ($activeOnly) {
-            $query->andWhere(['status' => 1]);
-        }
-        $types = $query->column();
-        foreach ($types as $type) {
-            /** @var ActiveRecord $fieldClass */
-            $fieldClass = 'Field' . ucfirst($type);
-            $rows = $fieldClass::find()->andWhere(['time' => $time])->andWhere(['item_id' => $item_id])->select('field_id, value')->asArray()->all();
-            foreach ($rows as $row) {
-                $field = self::findOne($row['field_id']);
-                /** @var ActiveRecord $directoryClass */
-                if ($directoryClass = $field->directory_class) {
-                    $directoryItem = $directoryClass::findOne($row['value']);
-                    $values[$row['field_id']] = $directoryItem;
-                } else {
-                    $values[$row['field_id']] = $row['value'];
-                }
-            }
-        }
-
-        return $values;
-    }
-
-    /**
      * Возвращает историю поля сущьности во времени
      * @param $item_id
      * @return array
@@ -230,7 +194,7 @@ class Field extends \yii\db\ActiveRecord
         /** @var ActiveRecord $fieldClass */
         $fieldClass = 'Field' . ucfirst($this->type);
 
-        $query = $fieldClass::find()->andWhere(['time' => $time])->andWhere(['>', 'value', 0])->andWhere('field_id', $this->id)->select('value')->groupBy('value');
+        $query = $fieldClass::find()->andWhere(['time' => $time, 'cat' => $this->cat])->andWhere(['>', 'value', 0])->andWhere('field_id', $this->id)->select('value')->groupBy('value');
         if ($itemQuery) {
             $query->andWhere(['IN', 'item_id', $itemQuery]);
         }
@@ -245,11 +209,12 @@ class Field extends \yii\db\ActiveRecord
 
     /**
      * Возвращает id заполненных харектеристик сущностей, соответствующих критериям
+     * @param $cat
      * @param $itemQuery Query
      * @param null $time
      * @return array|mixed|null
      */
-    public static function activeFieldsId($itemQuery, $time = null)
+    public static function activeFieldsId($cat, $itemQuery, $time = null)
     {
         if ($itemQuery) {
             $itemQuery = clone($itemQuery);
@@ -272,9 +237,46 @@ class Field extends \yii\db\ActiveRecord
         foreach ($types as $type) {
             /** @var ActiveRecord $fieldClass */
             $fieldClass = 'Field' . ucfirst($type);
-            $fields = array_merge($fields, $fieldClass::find()->andWhere(['time' => $time])->select('field_id')->groupBy('field_id')->andWhere(['IN', 'item_id', $itemQuery])->andWhere('value>0')->column());
+            $fields = array_merge($fields, $fieldClass::find()->andWhere(['time' => $time, 'cat' => $cat])->select('field_id')->groupBy('field_id')->andWhere(['IN', 'item_id', $itemQuery])->andWhere('value>0')->column());
         }
 
         return $fields;
+    }
+
+    /**
+     * Возвращает список значений полей сущности
+     * Справочники возвращаются в виде модели справочника, которые могут приводится к строке
+     * @param $cat
+     * @param $item_id
+     * @param bool $activeOnly
+     * @param null $time
+     * @return array
+     */
+    public static function values($cat, $item_id, $activeOnly = false, $time = null)
+    {
+        $values = [];
+
+        $query = self::find()->groupBy('type')->select('type');
+        if ($activeOnly) {
+            $query->andWhere(['status' => 1]);
+        }
+        $types = $query->column();
+        foreach ($types as $type) {
+            /** @var ActiveRecord $fieldClass */
+            $fieldClass = 'Field' . ucfirst($type);
+            $rows = $fieldClass::find()->andWhere(['time' => $time, 'cat' => $cat])->andWhere(['item_id' => $item_id])->select('field_id, value')->asArray()->all();
+            foreach ($rows as $row) {
+                $field = self::findOne($row['field_id']);
+                /** @var ActiveRecord $directoryClass */
+                if ($directoryClass = $field->directory_class) {
+                    $directoryItem = $directoryClass::findOne($row['value']);
+                    $values[$row['field_id']] = $directoryItem;
+                } else {
+                    $values[$row['field_id']] = $row['value'];
+                }
+            }
+        }
+
+        return $values;
     }
 }
