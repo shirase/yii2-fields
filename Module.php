@@ -12,7 +12,7 @@ class Module extends \yii\base\Module
      */
     public $controllerNamespace = 'shirase\modules\fields\controllers';
 
-    public $defaultRoute = 'field';
+    public $defaultRoute = 'field/index';
 
     /**
      * @inheritdoc

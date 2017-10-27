@@ -4,6 +4,7 @@ namespace shirase\modules\fields\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -33,7 +34,10 @@ class FieldController extends Controller
 
     /**
      * Lists all Field models.
+     * @param $cat string Fields category
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
      */
     public function actionIndex($cat)
     {
@@ -46,12 +50,12 @@ class FieldController extends Controller
             array_pop($m);
             $m[] = 'update';
             if (!Yii::$app->user->can(implode('/', $m))) {
-                throw new HttpException(403);
+                throw new ForbiddenHttpException();
             }
 
             $model = $this->findModel(Yii::$app->request->post('editableKey'));
 
-            $out = Json::encode(['output'=>'', 'message'=>'']);
+            $out = Json::encode(['output' => '', 'message' => '']);
 
             $posted = current($_POST['Field']);
             $post = ['Field' => $posted];
@@ -63,10 +67,10 @@ class FieldController extends Controller
                 /*if (isset($posted['name'])) {
                     $output = '';
                 }*/
-                $out = Json::encode(['output'=>$output, 'message'=>'']);
+                $out = Json::encode(['output' => $output, 'message' => '']);
             }
-            echo $out;
-            return;
+
+            return $out;
         }
 
         return $this->render('index', [
@@ -82,19 +86,20 @@ class FieldController extends Controller
      */
     public function actionView($id)
     {
-        $model=$this->findModel($id);
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('kv-detail-success', 'Saved record successfully');
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('view', ['model'=>$model]);
+            return $this->render('view', ['model' => $model]);
         }
     }
 
     /**
      * Creates a new Field model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $cat string Fields category
      * @return mixed
      */
     public function actionCreate($cat)
@@ -104,7 +109,7 @@ class FieldController extends Controller
         $model->cat = $cat;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index', 'returned'=>true]);
+            return $this->redirect(['index', 'returned' => true]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -123,7 +128,7 @@ class FieldController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index', 'returned'=>true]);
+            return $this->redirect(['index', 'returned' => true]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -137,16 +142,17 @@ class FieldController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id) {
+    public function actionDelete($id)
+    {
         $post = Yii::$app->request->post();
         if (Yii::$app->request->isAjax && isset($post['j-delete'])) {
             if ($this->findModel($id)->delete()) {
                 echo Json::encode([
                     'success' => true,
                     'messages' => [
-                    'kv-detail-info' => 'Successfully deleted. <a href="' .
-                                                Url::to(['index']) . '" class="btn btn-sm btn-info">' .
-                        '<i class="glyphicon glyphicon-hand-right"></i>  Click here</a> to proceed.'
+                        'kv-detail-info' => 'Successfully deleted. <a href="' .
+                            Url::to(['index']) . '" class="btn btn-sm btn-info">' .
+                            '<i class="glyphicon glyphicon-hand-right"></i>  Click here</a> to proceed.'
                     ]
                 ]);
             } else {
@@ -160,7 +166,7 @@ class FieldController extends Controller
             return;
         } else {
             $this->findModel($id)->delete();
-            $this->redirect(['index', 'returned'=>true]);
+            $this->redirect(['index', 'returned' => true]);
         }
     }
 

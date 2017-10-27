@@ -3,6 +3,7 @@
 namespace shirase\modules\fields\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "field_text".
@@ -23,7 +24,6 @@ class FieldText extends \yii\db\ActiveRecord
     {
         return 'field_text';
     }
-
 
     /**
      * @inheritdoc

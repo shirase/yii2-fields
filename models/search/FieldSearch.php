@@ -76,11 +76,12 @@ class FieldSearch extends Field
         return $dataProvider;
     }
 
-    public static function typeOpt() {
+    public static function typeOpt()
+    {
         return [
-            'string'=>Yii::t('fields', 'String'),
-            'int'=>Yii::t('fields', 'Integer'),
-            'directory'=>Yii::t('fields', 'Directory'),
+            'string' => Yii::t('fields', 'String'),
+            'int' => Yii::t('fields', 'Integer'),
+            'directory' => Yii::t('fields', 'Directory'),
         ];
     }
 }

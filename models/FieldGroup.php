@@ -24,14 +24,14 @@ class FieldGroup extends \yii\db\ActiveRecord
     }
 
     /**
-    * @inheritdoc
-    */
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             [
                 'class' => \shirase\tree\TreeBehavior::className(),
-                'pid'=>false,
+                'pid' => false,
             ]
         ];
     }
