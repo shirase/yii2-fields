@@ -99,7 +99,7 @@ class Field extends \yii\db\ActiveRecord
         /** @var ActiveRecord $fieldClass */
         $fieldClass = 'Field' . ucfirst($this->type);
         /** @var FieldString|FieldDirectory $fieldType */
-        $fieldType = $fieldClass::findOne(['time' => $time, 'field_id' => $this->id, 'item_id' => $item_id]);
+        $fieldType = $fieldClass::findOne(['time' => $time, 'cat'=>$this->cat, 'field_id' => $this->id, 'item_id' => $item_id]);
         if (!$fieldType) {
             return false;
         }
@@ -121,7 +121,7 @@ class Field extends \yii\db\ActiveRecord
         if ($this->multi) {
             $fieldClass::deleteAll(['cat' => $this->cat, 'field_id' => $this->id, 'item_id' => $item_id, 'time' => $time]);
         } else {
-            $fieldType = $fieldClass::findOne(['time' => $time, 'field_id' => $this->id, 'item_id' => $item_id]);
+            $fieldType = $fieldClass::findOne(['time' => $time, 'cat'=>$this->cat, 'field_id' => $this->id, 'item_id' => $item_id]);
         }
 
         if (!$fieldType) {
@@ -162,6 +162,7 @@ class Field extends \yii\db\ActiveRecord
             ->andWhere('`time` IS NOT NULL')
             ->orderBy('time')
             ->andWhere([
+                'cat' => $this->cat,
                 'field_id' => $this->id,
                 'item_id' => $item_id,
             ])

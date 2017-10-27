@@ -39,10 +39,9 @@ class m171027_091808_fields extends Migration
             'value' => $this->text(),
         ], $tableOptions);
 
-        $this->createIndex('cat', '{{%field_string}}', 'cat', false);
-        $this->createIndex('time_item', '{{%field_string}}', ['time', 'item_id'], false);
-        $this->createIndex('time_field_item', '{{%field_string}}', ['time', 'field_id', 'item_id'], false);
-        $this->createIndex('time_field_value', '{{%field_string}}', ['time', 'field_id', 'value(100)'], false);
+        $this->createIndex('time_item', '{{%field_string}}', ['cat', 'time', 'item_id'], false);
+        $this->createIndex('time_field_item', '{{%field_string}}', ['cat', 'time', 'field_id', 'item_id'], false);
+        $this->createIndex('time_field_value', '{{%field_string}}', ['cat', 'time', 'field_id', 'value(100)'], false);
         $this->addForeignKey('fk_field_string_field', '{{%field_string}}', 'field_id', '{{%field}}', 'id', 'CASCADE', 'CASCADE');
 
         $this->createTable('{{%field_text}}', [
@@ -54,10 +53,9 @@ class m171027_091808_fields extends Migration
             'value' => $this->text(),
         ], $tableOptions);
 
-        $this->createIndex('cat', '{{%field_text}}', 'cat', false);
-        $this->createIndex('time_item', '{{%field_text}}', ['time', 'item_id'], false);
-        $this->createIndex('time_field_item', '{{%field_text}}', ['time', 'field_id', 'item_id'], false);
-        $this->createIndex('time_field_value', '{{%field_text}}', ['time', 'field_id', 'value(100)'], false);
+        $this->createIndex('time_item', '{{%field_text}}', ['cat', 'time', 'item_id'], false);
+        $this->createIndex('time_field_item', '{{%field_text}}', ['cat', 'time', 'field_id', 'item_id'], false);
+        $this->createIndex('time_field_value', '{{%field_text}}', ['cat', 'time', 'field_id', 'value(100)'], false);
         $this->addForeignKey('field_text_field', '{{%field_text}}', 'field_id', '{{%field}}', 'id', 'CASCADE', 'CASCADE');
 
         $this->createTable('{{%field_int}}', [
@@ -69,10 +67,9 @@ class m171027_091808_fields extends Migration
             'value' => $this->float(),
         ], $tableOptions);
 
-        $this->createIndex('cat', '{{%field_int}}', 'cat', false);
-        $this->createIndex('time_item', '{{%field_int}}', ['time', 'item_id'], false);
-        $this->createIndex('time_field_item', '{{%field_int}}', ['time', 'field_id', 'item_id'], false);
-        $this->createIndex('time_field_value', '{{%field_int}}', ['time', 'field_id', 'value'], false);
+        $this->createIndex('time_item', '{{%field_int}}', ['cat', 'time', 'item_id'], false);
+        $this->createIndex('time_field_item', '{{%field_int}}', ['cat', 'time', 'field_id', 'item_id'], false);
+        $this->createIndex('time_field_value', '{{%field_int}}', ['cat', 'time', 'field_id', 'value'], false);
         $this->addForeignKey('field_int_field', '{{%field_int}}', 'field_id', '{{%field}}', 'id', 'CASCADE', 'CASCADE');
 
         $this->createTable('{{%field_directory}}', [
@@ -85,10 +82,9 @@ class m171027_091808_fields extends Migration
             'value' => $this->integer(),
         ], $tableOptions);
 
-        $this->createIndex('cat', '{{%field_directory}}', 'cat', false);
-        $this->createIndex('time_item', '{{%field_directory}}', ['time', 'item_id'], false);
-        $this->createIndex('time_field_item', '{{%field_directory}}', ['time', 'field_id', 'item_id'], false);
-        $this->createIndex('time_field_value', '{{%field_directory}}', ['time', 'field_id', 'value'], false);
+        $this->createIndex('time_item', '{{%field_directory}}', ['cat', 'time', 'item_id'], false);
+        $this->createIndex('time_field_item', '{{%field_directory}}', ['cat', 'time', 'field_id', 'item_id'], false);
+        $this->createIndex('time_field_value', '{{%field_directory}}', ['cat', 'time', 'field_id', 'value'], false);
         $this->addForeignKey('field_directory_field', '{{%field_directory}}', 'field_id', '{{%field}}', 'id', 'CASCADE', 'CASCADE');
     }
 
